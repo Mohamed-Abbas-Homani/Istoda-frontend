@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* Import the Patrick Hand font */
+@font-face {
+  font-family: 'Patrick Hand';
+  src: url('/fonts/PatrickHand-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --background: #FEFAEF;
+  --foreground: #171717;
+  --primary: #9d7dd8;
+  --font-patrick: 'Patrick Hand', cursive;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-hand: var(--font-patrick);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground: #FEFAEF;
+    --background: #171717;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-patrick), Arial, Helvetica, sans-serif;
+}

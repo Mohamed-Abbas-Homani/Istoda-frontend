@@ -1,0 +1,181 @@
+/* Container for both navbar and profile section */
+.navContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 98%;
+}
+
+/* Main navbar (without profile) */
+.navbar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+  background: var(--background);
+  box-shadow: 4px 4px 8px #d8d5cb, -4px -4px 8px #ffffff, 
+              inset -1px -1px 2px #d8d5cb, inset 1px 1px 2px #ffffff;
+  border-radius: 13px;
+}
+
+/* Left cluster */
+.navbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navbarLogo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 0 8px;
+}
+
+.navbarTagline {
+  font-weight: 500;
+  white-space: nowrap;
+  color: #7e22ce;
+  font-size: 1.25rem;
+}
+
+.navbarSearch {
+  margin-left: 40px;
+  width: 22rem;
+}
+
+.navbarSearchInput {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 13px;
+  outline: none;
+  font-size: 0.9rem;
+  border: none;
+  background: var(--background);
+  box-shadow: inset 3px 3px 6px #d8d5cb,
+              inset -3px -3px 6px #ffffff,
+              -1px -1px 1px #d8d5cb, 1px 1px 1px #ffffff;
+}
+
+/* Right cluster (just the button now) */
+.navbarRight {
+  display: flex;
+  align-items: center;
+}
+
+.navbarButton {
+  color: #7e22ce;
+  padding: 8px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Separate Profile Section */
+.profileSection {
+    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+  background: var(--background);
+  border-radius: 16px;
+  box-shadow: 4px 4px 8px #d8d5cb, -4px -4px 8px #ffffff,
+              inset -1px -1px 2px #d8d5cb, inset 1px 1px 2px #ffffff;
+  position: relative;
+}
+
+.profileAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--background);
+}
+
+.avatarImg {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.dropdownToggle {
+  background: var(--background);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #7e22ce;
+  cursor: pointer;
+}
+
+/* Dropdown */
+.navbarDropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 8px;
+  width: 140px;
+  background: var(--background);
+  border-radius: 12px;
+  box-shadow: 4px 4px 8px #d8d5cb, -4px -4px 8px #ffffff,
+              inset -1px -1px 1px #d8d5cb, inset 1px 1px 1px #ffffff;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 12px 16px;
+  text-align: left;
+  width: 100%;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  color: #374151;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.dropdownItem:hover {
+  background: rgba(126, 34, 206, 0.1);
+  color: #7e22ce;
+}
+
+.dropdownItem:not(:last-child) {
+  border-bottom: 1px solid rgba(216, 213, 203, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navContainer {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .profileSection {
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    padding: 8px 16px;
+  }
+  
+  .navbarTagline {
+    display: none;
+  }
+  
+  .navbarSearch {
+    display: none;
+  }
+}
