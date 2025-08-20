@@ -4,15 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
 import { IoIosArrowDown } from "react-icons/io";
+import { useStore } from '@/app/services/store';
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
-  }, []);
+  const { token, user, setUser, setToken } = useStore()
 
   return (
     <div className={styles.navContainer}>
@@ -21,7 +17,7 @@ export default function Navbar() {
         {/* Left: Logo + Tagline + Search */}
         <div className={styles.navbarLeft}>
           {/* Logo */}
-          <Link href="/">
+          <Link href="/home">
             <div className={styles.navbarLogo}>
               <Image src="/istoda.png" alt="Istoda Logo" width={80} height={30} />
             </div>
@@ -31,13 +27,13 @@ export default function Navbar() {
             let your stories alive
           </span>
           {/* Search box */}
-          <div className={styles.navbarSearch}>
+          {token && <div className={styles.navbarSearch}>
             <input
               type="text"
               placeholder="Search..."
               className={styles.navbarSearchInput}
             />
-          </div>
+          </div>}
         </div>
 
         {/* Right: Navigation Buttons */}
@@ -48,9 +44,9 @@ export default function Navbar() {
           <Link href="/contact" className={styles.navbarButton}>
             Contact Us
           </Link>
-          <Link href="/editor" className={styles.navbarButton}>
+          {token && <Link href="/editor" className={styles.navbarButton}>
             Start Writing Now
-          </Link>
+          </Link>}
         </div>
       </nav>
 
@@ -59,17 +55,17 @@ export default function Navbar() {
         {/* Profile Avatar */}
         <div className={styles.profileAvatar}>
           <Image
-            src="/profile.png"
+            src={user?.profile_picture ? `http://localhost:8000/uploads/${user?.profile_picture}` : "/default.png"}
             alt="Profile"
             width={40}
             height={40}
             className={styles.avatarImg}
           />
         </div>
-        
+
         {/* Dropdown Button */}
-        <button 
-          onClick={() => setOpen(!open)} 
+        <button
+          onClick={() => setOpen(!open)}
           className={styles.dropdownToggle}
         >
           <IoIosArrowDown size=".7rem" />
@@ -78,7 +74,7 @@ export default function Navbar() {
         {/* Dropdown Menu */}
         {open && (
           <div className={styles.navbarDropdown}>
-            {!isLoggedIn ? (
+            {!token ? (
               <>
                 <Link href="/auth/login" className={styles.dropdownItem}>
                   Login
@@ -90,8 +86,8 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => {
-                  localStorage.removeItem('token');
-                  window.location.reload();
+                  setToken("");
+                  setUser(null);
                 }}
                 className={styles.dropdownItem}
               >

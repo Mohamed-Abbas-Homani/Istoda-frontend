@@ -1,14 +1,13 @@
-import Layout from "./components/Layout";
+'use client';
 
-export default function Home() {
+import Layout from "./components/Layout/Layout";
+import Welcome from "./components/Welcome/Welcome";
+
+export default function WelcomePage() {
+
   return (
-    <Layout>
-      <div className="flex flex-col items-center justify-center text-center mt-20">
-        <h1 className="text-4xl font-bold text-primary mb-4">Welcome to Istoda!</h1>
-        <p className="text-lg">
-          Your awesome Next.js app with backend at localhost:8000
-        </p>
-      </div>
+    <Layout withNav={false}>
+      <Welcome />
     </Layout>
   );
 }
