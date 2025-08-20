@@ -11,7 +11,7 @@ type LayoutMode = "protected" | "notProtected" | "public";
 type LayoutProps = {
   children: React.ReactNode;
   mode?: LayoutMode; // default = "public"
-  withNav?: boolean
+  withNav?: boolean;
 };
 
 // Loading component for auth checks
@@ -19,13 +19,15 @@ function AuthLoading() {
   return (
     <div className={styles.layout}>
       <div className={styles.main}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          fontSize: '18px'
-        }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            fontSize: "18px",
+          }}
+        >
           Loading...
         </div>
       </div>
@@ -33,7 +35,11 @@ function AuthLoading() {
   );
 }
 
-export default function Layout({ children, mode = "public", withNav = true }: LayoutProps) {
+export default function Layout({
+  children,
+  mode = "public",
+  withNav = true,
+}: LayoutProps) {
   const router = useRouter();
   const { token } = useStore();
   const [isClient, setIsClient] = useState(false);
@@ -60,7 +66,7 @@ export default function Layout({ children, mode = "public", withNav = true }: La
     }
 
     if (mode === "notProtected" && token) {
-      router.push("/home")
+      router.push("/home");
       return;
     }
 
@@ -83,7 +89,10 @@ export default function Layout({ children, mode = "public", withNav = true }: La
     return <AuthLoading />;
   }
   return (
-    <div className={styles.layout} style={{ padding: `${withNav ? "1.2rem 0.1rem 0.1rem 0" : 0}` }}>
+    <div
+      className={styles.layout}
+      style={{ padding: `${withNav ? "1.2rem 0.1rem 0.1rem 0" : 0}` }}
+    >
       {withNav && <Navbar />}
       <main className={styles.main}>{children}</main>
       <Notification />

@@ -1,6 +1,6 @@
-'use client';
-import { useSignup } from '@/app/hooks/useSingup';
-import styles from './Auth.module.css';
+"use client";
+import { useSignup } from "@/app/hooks/useSingup";
+import styles from "./Auth.module.css";
 
 export default function Signup() {
   const {
@@ -17,7 +17,7 @@ export default function Signup() {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Sign Up</h2> 
+      <h2 className={styles.title}>Sign Up</h2>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <input

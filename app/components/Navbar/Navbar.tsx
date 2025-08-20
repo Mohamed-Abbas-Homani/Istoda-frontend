@@ -1,14 +1,14 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import styles from './Navbar.module.css';
+"use client";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import styles from "./Navbar.module.css";
 import { IoIosArrowDown } from "react-icons/io";
-import { useStore } from '@/app/services/store';
+import { useStore } from "@/app/services/store";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { token, user, setUser, setToken } = useStore()
+  const { token, user, setUser, setToken } = useStore();
 
   return (
     <div className={styles.navContainer}>
@@ -19,21 +19,26 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/home">
             <div className={styles.navbarLogo}>
-              <Image src="/istoda.png" alt="Istoda Logo" width={80} height={30} />
+              <Image
+                src="/istoda.png"
+                alt="Istoda Logo"
+                width={80}
+                height={30}
+              />
             </div>
           </Link>
           {/* Tagline */}
-          <span className={styles.navbarTagline}>
-            let your stories alive
-          </span>
+          <span className={styles.navbarTagline}>let your stories alive</span>
           {/* Search box */}
-          {token && <div className={styles.navbarSearch}>
-            <input
-              type="text"
-              placeholder="Search..."
-              className={styles.navbarSearchInput}
-            />
-          </div>}
+          {token && (
+            <div className={styles.navbarSearch}>
+              <input
+                type="text"
+                placeholder="Search..."
+                className={styles.navbarSearchInput}
+              />
+            </div>
+          )}
         </div>
 
         {/* Right: Navigation Buttons */}
@@ -44,9 +49,11 @@ export default function Navbar() {
           <Link href="/contact" className={styles.navbarButton}>
             Contact Us
           </Link>
-          {token && <Link href="/editor" className={styles.navbarButton}>
-            Start Writing Now
-          </Link>}
+          {token && (
+            <Link href="/editor" className={styles.navbarButton}>
+              Start Writing Now
+            </Link>
+          )}
         </div>
       </nav>
 
@@ -55,7 +62,11 @@ export default function Navbar() {
         {/* Profile Avatar */}
         <div className={styles.profileAvatar}>
           <Image
-            src={user?.profile_picture ? `http://localhost:8000/uploads/${user?.profile_picture}` : "/default.png"}
+            src={
+              user?.profile_picture
+                ? `http://localhost:8000/uploads/${user?.profile_picture}`
+                : "/default.png"
+            }
             alt="Profile"
             width={40}
             height={40}

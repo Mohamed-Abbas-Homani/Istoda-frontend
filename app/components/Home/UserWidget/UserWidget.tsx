@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from './UserWidget.module.css';
-import Image from 'next/image';
+import React from "react";
+import styles from "./UserWidget.module.css";
+import Image from "next/image";
 
 interface UserData {
   id: string;
@@ -26,21 +26,26 @@ const UserWidget: React.FC<UserWidgetProps> = ({ user }) => {
     followers_count = 0,
     following_count = 0,
     stories_read = 0,
-    stories_written = 0
+    stories_written = 0,
   } = user;
 
   return (
     <div className={styles.widget}>
       <div className={styles.profileSection}>
         <div className={styles.profilePic}>
-            <Image
-            src={profile_picture ? `http://localhost:8000/uploads/${profile_picture}` : "/default.png"}
-              alt={`${username}'s profile`}
-              className={styles.profileImage}
-              width={100} height={100}
-            />
+          <Image
+            src={
+              profile_picture
+                ? `http://localhost:8000/uploads/${profile_picture}`
+                : "/default.png"
+            }
+            alt={`${username}'s profile`}
+            className={styles.profileImage}
+            width={100}
+            height={100}
+          />
         </div>
-        
+
         <div className={styles.userInfo}>
           <h2 className={styles.username}>{username}</h2>
           <p className={styles.email}>{email}</p>

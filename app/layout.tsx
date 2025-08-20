@@ -20,11 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${patrickHand.variable}`}
-      >
-        {children}
-      </body>
+      <body className={`${patrickHand.variable}`}>{children}</body>
     </html>
   );
 }

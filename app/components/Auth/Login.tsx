@@ -1,6 +1,6 @@
-'use client';
-import { useLogin } from '@/app/hooks/useLogin';
-import styles from './Auth.module.css';
+"use client";
+import { useLogin } from "@/app/hooks/useLogin";
+import styles from "./Auth.module.css";
 
 export default function Login() {
   const { email, setEmail, password, setPassword, handleSubmit } = useLogin();
