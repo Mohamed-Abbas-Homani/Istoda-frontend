@@ -39,7 +39,7 @@ const StoriesFeed = () => {
           <h2 className={styles.categoryTitle}>{category}</h2>
           <div className={styles.storiesRow}>
             {stories[category].map((story) => (
-              <StoryCard key={story.id} story={story} readersCount={"toula"}/>
+              <StoryCard key={story.id} story={story} readersCount={"toula"} />
             ))}
           </div>
         </div>

@@ -7,7 +7,7 @@ import { Story } from "@/app/services/store";
 
 interface StoryCardProps {
   story: Story;
-  readersCount: string; 
+  readersCount: string;
 }
 
 const StoryCard: React.FC<StoryCardProps> = ({ story, readersCount }) => {
