@@ -8,6 +8,16 @@ export interface User {
   profile_picture: string;
 }
 
+export type Story = {
+  id: string;
+  title: string;
+  cover_photo: string;
+  content: string;
+  category: string;
+  publishingDate: string;
+  user: User | null;
+};
+
 export type NotificationType = "success" | "error" | "info";
 
 export interface Notification {

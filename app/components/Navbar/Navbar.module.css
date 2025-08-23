@@ -14,8 +14,10 @@
   justify-content: space-between;
   padding: 0px 10px;
   background: var(--background);
-  box-shadow: 4px 4px 8px #d8d5cb, -4px -4px 8px #ffffff, 
-              inset -1px -1px 2px #d8d5cb, inset 1px 1px 2px #ffffff;
+  box-shadow: 3px 3px 6px #d8d5cb,
+              -3px -3px 6px #ffffff,
+              inset -1px -1px 2px #d8d5cb,
+              inset 1px 1px 2px #ffffff;
   border-radius: 13px;
 }
 

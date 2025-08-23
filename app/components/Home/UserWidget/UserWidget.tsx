@@ -31,6 +31,7 @@ const UserWidget: React.FC<UserWidgetProps> = ({ user }) => {
 
   return (
     <div className={styles.widget}>
+      <h1 className={styles.htop}>Profile</h1>
       <div className={styles.profileSection}>
         <div className={styles.profilePic}>
           <Image

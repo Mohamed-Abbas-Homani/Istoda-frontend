@@ -1,29 +1,24 @@
-/* HomePage.module.css */
 .container {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   gap: 2rem;
   padding: 2rem;
-  min-height: 100vh;
 }
 
+/* Sidebar (20%) */
 .sidebar {
-  flex: 0 0 20%;
+  flex: 2.5;
   display: flex;
   justify-content: center;
 }
 
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
+/* Main content (65%) */
 .mainContent {
+  flex: 6.5;
   padding: 2rem;
   background: var(--background);
-  border-radius: 1.5rem;
+  border-radius: 13px;
   box-shadow: 3px 3px 6px #d8d5cb,
               -3px -3px 6px #ffffff,
               inset -1px -1px 2px #d8d5cb,
@@ -42,3 +37,26 @@
   opacity: 0.7;
   line-height: 1.6;
 }
+
+/* Networks (15%) */
+.networks {
+  position: relative;
+  flex: 1.5;
+  padding: 1.5rem;
+  padding-top: 3rem;
+  background: var(--background);
+  border-radius: 13px;
+  box-shadow: 2px 2px 4px #d8d5cb,
+              -2px -2px 4px #ffffff,
+              inset -1px -1px 2px #d8d5cb,
+              inset 1px 1px 2px #ffffff;
+  height: fit-content;
+}
+
+.htop {
+  font-size: 1.7rem;
+  position:absolute;
+
+  top:10px;
+  left:20px;
+  color: var(--foreground);}

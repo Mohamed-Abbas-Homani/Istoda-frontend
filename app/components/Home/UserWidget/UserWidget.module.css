@@ -1,5 +1,6 @@
 /* UserWidget.module.css */
 .widget {
+  position: relative;
     height: 60%;
   width:100%;
   padding: 2rem;
@@ -155,3 +156,11 @@
   background: linear-gradient(90deg, transparent, #d8d5cb, transparent);
   margin: 1.5rem 0;
 }
+
+.htop {
+  font-size: 1.7rem;
+  position:absolute;
+
+  top:10px;
+  left:20px;
+  color: var(--foreground);}

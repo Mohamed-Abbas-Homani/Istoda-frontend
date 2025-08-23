@@ -1,0 +1,75 @@
+.feedContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.categorySection {
+  margin-bottom: 2rem;
+}
+
+.categoryTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.storiesRow {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  border-radius: 13px;
+  padding: 13px;
+    box-shadow: inset 3px 3px 6px #d8d5cb,
+              inset -3px -3px 6px #ffffff,
+               -1px -1px 2px #d8d5cb,
+              1px 1px 2px #ffffff;
+}
+
+.coverPhoto {
+  width: 70%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  flex:7
+}
+
+.storyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.storyTitle {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.storyAuthor {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: var(--foreground);
+}
+
+.storyDate {
+  font-size: 0.8rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+.storyCard {
+    position: relative;
+    width: 20%;
+    height: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 13px;
+    box-shadow: 3px 3px 6px #d8d5cb,
+              -3px -3px 6px #ffffff,
+              inset -1px -1px 2px #d8d5cb,
+              inset 1px 1px 2px #ffffff;
+}

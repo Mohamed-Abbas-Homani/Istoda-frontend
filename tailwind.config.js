@@ -4,7 +4,6 @@ export const themeColors = {
   primary: 'var(--primary)',
   background: 'var(--background)',
   foreground: 'var(--foreground)',
-  secondary: '#7C3AED',
   success: colors.green[500],
   warning: colors.yellow[400],
   error: colors.red[500],
