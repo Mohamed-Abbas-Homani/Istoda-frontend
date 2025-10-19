@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import Home from "@/app/components/Home/home";
-import Layout from "@/app/components/Layout/Layout";
+import Home from "@/components/Home/home";
+import Layout from "@/components/Layout/Layout";
 
 const HomePage = () => {
   return (
