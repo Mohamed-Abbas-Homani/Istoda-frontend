@@ -1,5 +1,5 @@
 "use client";
-import { useSignup } from "@/app/hooks/useSingup";
+import { useSignup } from "@/hooks/useSingup";
 import styles from "./Auth.module.css";
 
 export default function Signup() {

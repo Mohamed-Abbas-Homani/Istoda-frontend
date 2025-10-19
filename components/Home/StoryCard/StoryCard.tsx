@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { Eye } from "lucide-react";
 import styles from "./StoryCard.module.css";
-import { Story } from "@/app/services/api";
+import { Story } from "@/services/api";
 import Link from "next/link";
 
 interface StoryCardProps {

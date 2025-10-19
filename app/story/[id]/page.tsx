@@ -2,8 +2,8 @@
 "use client";
 import React from "react";
 import { use } from "react";
-import Layout from "@/app/components/Layout/Layout";
-import StoryReader from "@/app/components/StoryReader/StoryReader";
+import Layout from "@/components/Layout/Layout";
+import StoryReader from "@/components/StoryReader/StoryReader";
 
 export default function StoryPage({
   params,

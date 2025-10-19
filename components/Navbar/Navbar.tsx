@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./Navbar.module.css";
 import { ChevronDown } from "lucide-react";
-import { useAuthStore } from "@/app/services/stores";
+import { useAuthStore } from "@/services/stores";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

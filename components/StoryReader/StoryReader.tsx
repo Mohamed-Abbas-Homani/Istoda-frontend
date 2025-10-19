@@ -16,8 +16,8 @@ import {
   usePageStore,
   useCommentStore,
   useAuthStore,
-} from "@/app/services/stores";
-import { useNotificationStore } from "@/app/services/stores";
+} from "@/services/stores";
+import { useNotificationStore } from "@/services/stores";
 
 interface StoryReaderProps {
   storyId: string;

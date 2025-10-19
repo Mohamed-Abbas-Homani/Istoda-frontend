@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import styles from "./StoriesFeed.module.css";
-import { useStoryStore } from "@/app/services/stores";
+import { useStoryStore } from "@/services/stores";
 import StoryCard from "../StoryCard/StoryCard";
 
 const StoriesFeed = () => {

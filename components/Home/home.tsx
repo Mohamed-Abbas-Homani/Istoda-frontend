@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Home.module.css";
 import UserWidget from "./UserWidget/UserWidget";
 import StoriesFeed from "./StoriesFeed/StoriesFeed";
-import { useAuthStore } from "@/app/services/stores";
+import { useAuthStore } from "@/services/stores";
 
 const Home = () => {
   const { user } = useAuthStore();

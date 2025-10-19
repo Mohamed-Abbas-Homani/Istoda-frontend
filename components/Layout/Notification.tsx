@@ -1,5 +1,5 @@
 "use client";
-import { useNotificationStore } from "@/app/services/stores";
+import { useNotificationStore } from "@/services/stores";
 import styles from "./Notification.module.css";
 
 export default function Notification() {

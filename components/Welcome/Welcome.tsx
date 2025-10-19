@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useAuthStore } from "@/app/services/stores";
+import { useAuthStore } from "@/services/stores";
 import { useRouter } from "next/navigation";
 import styles from "./Welcome.module.css";
 

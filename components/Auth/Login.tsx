@@ -1,5 +1,5 @@
 "use client";
-import { useLogin } from "@/app/hooks/useLogin";
+import { useLogin } from "@/hooks/useLogin";
 import styles from "./Auth.module.css";
 
 export default function Login() {

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../Navbar/Navbar";
 import styles from "./Layout.module.css";
 import Notification from "./Notification";
-import { useAuthStore } from "@/app/services/stores";
+import { useAuthStore } from "@/services/stores";
 
 type LayoutMode = "protected" | "notProtected" | "public";
 
