@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useStore } from "@/app/services/store";
+import { useAuthStore } from "@/app/services/stores";
 import { useRouter } from "next/navigation";
 import styles from "./Welcome.module.css";
 
 export default function Welcome() {
-  const { token } = useStore();
+  const { token } = useAuthStore();
   const router = useRouter();
 
   return (

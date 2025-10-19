@@ -6,7 +6,7 @@ interface UserData {
   id: string;
   username: string;
   email: string;
-  profile_picture?: string;
+  profilePicture?: string;
   followers_count?: number;
   following_count?: number;
   stories_read?: number;
@@ -22,7 +22,7 @@ const UserWidget: React.FC<UserWidgetProps> = ({ user }) => {
   const {
     username,
     email,
-    profile_picture,
+    profilePicture,
     followers_count = 0,
     following_count = 0,
     stories_read = 0,
@@ -36,8 +36,8 @@ const UserWidget: React.FC<UserWidgetProps> = ({ user }) => {
         <div className={styles.profilePic}>
           <Image
             src={
-              profile_picture
-                ? `http://localhost:8000/uploads/${profile_picture}`
+              profilePicture
+                ? `http://localhost:8000/uploads/${profilePicture}`
                 : "/default.png"
             }
             alt={`${username}'s profile`}

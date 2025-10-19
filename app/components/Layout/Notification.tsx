@@ -1,9 +1,9 @@
 "use client";
-import { useStore } from "@/app/services/store";
+import { useNotificationStore } from "@/app/services/stores";
 import styles from "./Notification.module.css";
 
 export default function Notification() {
-  const notifications = useStore((state) => state.notifications);
+  const notifications = useNotificationStore((state) => state.notifications);
 
   return (
     <div className={styles.container}>

@@ -1,14 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./Navbar.module.css";
-import { IoIosArrowDown } from "react-icons/io";
-import { useStore } from "@/app/services/store";
+import { ChevronDown } from "lucide-react";
+import { useAuthStore } from "@/app/services/stores";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { token, user, setUser, setToken } = useStore();
+  const { token, user, logout } = useAuthStore();
 
   return (
     <div className={styles.navContainer}>
@@ -63,8 +63,8 @@ export default function Navbar() {
         <div className={styles.profileAvatar}>
           <Image
             src={
-              user?.profile_picture
-                ? `http://localhost:8000/uploads/${user?.profile_picture}`
+              user?.profilePicture
+                ? `http://localhost:8000/uploads/${user?.profilePicture}`
                 : "/default.png"
             }
             alt="Profile"
@@ -79,7 +79,7 @@ export default function Navbar() {
           onClick={() => setOpen(!open)}
           className={styles.dropdownToggle}
         >
-          <IoIosArrowDown size=".7rem" />
+          <ChevronDown size={14} />
         </button>
 
         {/* Dropdown Menu */}
@@ -97,8 +97,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={() => {
-                  setToken("");
-                  setUser(null);
+                  logout();
                 }}
                 className={styles.dropdownItem}
               >

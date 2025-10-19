@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../Navbar/Navbar";
 import styles from "./Layout.module.css";
 import Notification from "./Notification";
-import { useStore } from "@/app/services/store";
+import { useAuthStore } from "@/app/services/stores";
 
 type LayoutMode = "protected" | "notProtected" | "public";
 
@@ -41,7 +41,7 @@ export default function Layout({
   withNav = true,
 }: LayoutProps) {
   const router = useRouter();
-  const { token } = useStore();
+  const { token } = useAuthStore();
   const [isClient, setIsClient] = useState(false);
   const [authChecked, setAuthChecked] = useState(false);
 
