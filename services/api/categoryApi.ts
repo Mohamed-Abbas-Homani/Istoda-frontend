@@ -4,16 +4,19 @@ export interface Category {
   id: string;
   name: string;
   description?: string;
+  color: string;
 }
 
 export interface CreateCategoryData {
   name: string;
   description?: string;
+  color?: string;
 }
 
 export interface UpdateCategoryData {
   name?: string;
   description?: string;
+  color?: string;
 }
 
 export const categoryApi = {

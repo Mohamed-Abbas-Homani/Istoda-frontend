@@ -2,35 +2,44 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../Navbar/Navbar";
-import styles from "./Layout.module.css";
+import Sidebar from "../Sidebar/Sidebar";
 import Notification from "./Notification";
 import { useAuthStore } from "@/services/stores";
+import { SidebarProvider, useSidebar } from "@/contexts/SidebarContext";
 
 type LayoutMode = "protected" | "notProtected" | "public";
 
 type LayoutProps = {
   children: React.ReactNode;
-  mode?: LayoutMode; // default = "public"
+  mode?: LayoutMode;
   withNav?: boolean;
 };
 
 // Loading component for auth checks
 function AuthLoading() {
   return (
-    <div className={styles.layout}>
-      <div className={styles.main}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            fontSize: "18px",
-          }}
-        >
-          Loading...
-        </div>
+    <div className="min-h-screen w-full flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
+        <p className="text-lg text-muted-foreground">Loading...</p>
       </div>
+    </div>
+  );
+}
+
+// Inner layout component that uses sidebar context
+function LayoutContent({ children, withNav, mode }: { children: React.ReactNode; withNav: boolean; mode: LayoutMode }) {
+  const { isOpen } = useSidebar();
+  const showSidebar = withNav && mode !== "notProtected";
+
+  return (
+    <div className="min-h-screen w-full flex flex-col bg-background">
+      {withNav && <Navbar showMenuButton={showSidebar} />}
+      {showSidebar && <Sidebar isOpen={isOpen} />}
+      <main className={`flex-1 transition-all duration-300 ${showSidebar ? (isOpen ? 'ml-60' : 'ml-20') : ''}`}>
+        {children}
+      </main>
+      <Notification />
     </div>
   );
 }
@@ -71,16 +80,14 @@ export default function Layout({
     }
 
     setAuthChecked(true);
-  }, [token, router, isClient]);
+  }, [token, router, isClient, mode]);
 
   // Show consistent layout during SSR
   if (!isClient) {
     return (
-      <div className={styles.layout}>
-        <Navbar />
-        <main className={styles.main}>{children}</main>
-        <Notification />
-      </div>
+      <SidebarProvider>
+        <LayoutContent withNav={withNav} mode={mode}>{children}</LayoutContent>
+      </SidebarProvider>
     );
   }
 
@@ -88,14 +95,10 @@ export default function Layout({
   if (!authChecked && mode !== "public") {
     return <AuthLoading />;
   }
+
   return (
-    <div
-      className={styles.layout}
-      style={{ padding: `${withNav ? "1.2rem 0.1rem 0.1rem 0" : 0}` }}
-    >
-      {withNav && <Navbar />}
-      <main className={styles.main}>{children}</main>
-      <Notification />
-    </div>
+    <SidebarProvider>
+      <LayoutContent withNav={withNav} mode={mode}>{children}</LayoutContent>
+    </SidebarProvider>
   );
 }

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const patrickHand = localFont({
   src: "../public/fonts/PatrickHand-Regular.ttf",
-  variable: "--font-hand",
+  variable: "--font-patrick",
   display: "swap",
 });
 
@@ -19,8 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${patrickHand.variable}`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${patrickHand.variable}`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

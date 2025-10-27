@@ -1,4 +1,3 @@
-// app/components/StoryReader/StoryReader.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -9,15 +8,18 @@ import {
   ChevronLeft,
   ChevronRight,
   Trash2,
+  User,
 } from "lucide-react";
-import styles from "./StoryReader.module.css";
+import ReactMarkdown from "react-markdown";
 import {
   useStoryStore,
   usePageStore,
   useCommentStore,
   useAuthStore,
+  useNotificationStore,
 } from "@/services/stores";
-import { useNotificationStore } from "@/services/stores";
+import { Card, CardHeader, CardTitle, CardContent, Button, Textarea, Badge } from "@/components/ui";
+import { cn } from "@/lib/utils";
 
 interface StoryReaderProps {
   storyId: string;
@@ -57,7 +59,7 @@ const StoryReader: React.FC<StoryReaderProps> = ({ storyId }) => {
       await getPagesByStory(storyId);
     };
     loadStory();
-  }, [storyId]);
+  }, [storyId, getStoryById, getStoryStats, getPagesByStory]);
 
   // Update user rating when story loads
   useEffect(() => {
@@ -78,16 +80,14 @@ const StoryReader: React.FC<StoryReaderProps> = ({ storyId }) => {
       }
     };
     loadComments();
-  }, [currentPageIndex, pages.length]);
+  }, [currentPageIndex, pages, getCommentsByPage, clearComments]);
 
   const handleRating = async (rating: number) => {
     try {
       await rateStory(storyId, { rating });
       setUserRating(rating);
       addNotification("Rating submitted!", "success");
-      // Refresh stats after rating
       await getStoryStats(storyId);
-      // Re-fetch story to get updated data without losing fields
       await getStoryById(storyId);
     } catch (error) {
       addNotification("Failed to submit rating", "error");
@@ -103,7 +103,6 @@ const StoryReader: React.FC<StoryReaderProps> = ({ storyId }) => {
           currentPageNumber: nextPage.pageNumber,
         });
         setCurrentPageIndex(nextPageIndex);
-        // Refresh stats to update reader count
         await getStoryStats(storyId);
       } catch (error) {
         addNotification("Failed to update reading progress", "error");
@@ -131,9 +130,7 @@ const StoryReader: React.FC<StoryReaderProps> = ({ storyId }) => {
       }
       setCommentText("");
       addNotification("Comment added!", "success");
-      // Refresh stats to update comment count
       await getStoryStats(storyId);
-      // Reload comments for current page
       if (pages.length > 0 && pages[currentPageIndex]) {
         await getCommentsByPage(pages[currentPageIndex].id);
       }
@@ -150,7 +147,6 @@ const StoryReader: React.FC<StoryReaderProps> = ({ storyId }) => {
     try {
       await deleteComment(commentId);
       addNotification("Comment deleted!", "success");
-      // Refresh stats to update comment count
       await getStoryStats(storyId);
     } catch (error) {
       addNotification("Failed to delete comment", "error");
@@ -158,212 +154,264 @@ const StoryReader: React.FC<StoryReaderProps> = ({ storyId }) => {
   };
 
   if (!currentStory) {
-    return <div className={styles.loading}>Loading story...</div>;
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
+          <p className="text-muted-foreground">Loading story...</p>
+        </div>
+      </div>
+    );
   }
 
   const currentPage = pages[currentPageIndex];
 
   return (
-    <div className={styles.container}>
-      {/* Story Header */}
-      <div className={styles.header}>
-        <div className={styles.coverSection}>
-          <div className={styles.coverWrapper}>
-            <Image
-              src={`http://localhost:8000/uploads/${currentStory.coverPhoto}`}
-              alt={`Cover photo for ${currentStory.title}`}
-              fill
-              className={styles.coverImage}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.storyInfo}>
-          <h1 className={styles.title}>{currentStory.title}</h1>
-          <p className={styles.description}>{currentStory.description}</p>
-
-          <div className={styles.metaInfo}>
-            <div className={styles.authorInfo}>
-              <div className={styles.authorAvatar}>
+    <div className="min-h-screen w-full px-4 md:px-6 lg:px-8 py-8 bg-background">
+      <div className="max-w-5xl mx-auto space-y-6">
+        {/* Story Header */}
+        <Card variant="neomorph" padding="lg">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Cover Photo */}
+            <div className="md:col-span-1">
+              <div className="relative w-full aspect-[2/3] rounded-lg overflow-hidden shadow-neomorph">
                 <Image
-                  src={
-                    currentStory.author?.profilePicture
-                      ? `http://localhost:8000/uploads/${currentStory.author.profilePicture}`
-                      : "/default.png"
-                  }
-                  alt={`${currentStory.author?.username || "Anonymous"} profile picture`}
-                  width={40}
-                  height={40}
-                  className={styles.avatar}
+                  src={`http://localhost:8000/uploads/${currentStory.coverPhoto}`}
+                  alt={`Cover photo for ${currentStory.title}`}
+                  fill
+                  className="object-cover"
+                  priority
                 />
               </div>
+            </div>
+
+            {/* Story Info */}
+            <div className="md:col-span-2 space-y-6">
               <div>
-                <p className={styles.authorName}>
-                  {currentStory.author?.username || "Anonymous"}
-                </p>
-                <p className={styles.publishDate}>
-                  {new Date(currentStory.publishingDate).toLocaleDateString()}
+                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
+                  {currentStory.title}
+                </h1>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  {currentStory.description}
                 </p>
               </div>
-            </div>
 
-            <div className={styles.statsRow}>
-              <div className={styles.statItem}>
-                <Book size={16} />
-                <span>{currentStoryStats?.readersCount || 0} readers</span>
+              {/* Author Info */}
+              <div className="flex items-center gap-3">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-primary/20">
+                  <Image
+                    src={
+                      currentStory.author?.profilePicture
+                        ? `http://localhost:8000/uploads/${currentStory.author.profilePicture}`
+                        : "/default.png"
+                    }
+                    alt={`${currentStory.author?.username || "Anonymous"} profile`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="font-medium text-foreground">
+                    {currentStory.author?.username || "Anonymous"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date(currentStory.publishingDate).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
-              <div className={styles.statItem}>
-                <Star size={16} />
-                <span>
-                  {currentStoryStats?.averageRating?.toFixed(1) || "0.0"}
-                </span>
+
+              {/* Stats */}
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <Book className="h-4 w-4 text-info" />
+                  <span className="text-muted-foreground">
+                    {currentStoryStats?.readersCount || 0} readers
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Star className="h-4 w-4 text-warning" />
+                  <span className="text-muted-foreground">
+                    {currentStoryStats?.averageRating?.toFixed(1) || "0.0"} rating
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <MessageCircle className="h-4 w-4 text-success" />
+                  <span className="text-muted-foreground">
+                    {currentStoryStats?.commentsCount || 0} comments
+                  </span>
+                </div>
               </div>
-              <div className={styles.statItem}>
-                <MessageCircle size={16} />
-                <span>{currentStoryStats?.commentsCount || 0}</span>
+
+              {/* Rating Section */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Rate this story:</p>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => handleRating(star)}
+                      className="transition-transform hover:scale-110"
+                    >
+                      <Star
+                        className={cn(
+                          "h-7 w-7 transition-colors",
+                          star <= userRating
+                            ? "text-warning fill-warning"
+                            : "text-muted-foreground hover:text-warning"
+                        )}
+                      />
+                    </button>
+                  ))}
+                </div>
+                {userRating > 0 && (
+                  <p className="text-sm text-muted-foreground">
+                    Your rating: {userRating}/5
+                  </p>
+                )}
               </div>
             </div>
           </div>
+        </Card>
 
-          {/* Rating Section */}
-          <div className={styles.ratingSection}>
-            <p className={styles.ratingLabel}>Rate this story:</p>
-            <div className={styles.stars}>
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  size={24}
-                  className={`${styles.star} ${star <= userRating ? styles.starFilled : ""}`}
-                  onClick={() => handleRating(star)}
-                  fill={star <= userRating ? "currentColor" : "none"}
-                />
-              ))}
-            </div>
-            {userRating > 0 && (
-              <span className={styles.yourRating}>
-                Your rating: {userRating}/5
-              </span>
+        {/* Reading Section */}
+        <Card variant="neomorph" padding="lg">
+          <CardContent className="space-y-6">
+            {pages.length > 0 ? (
+              <>
+                <div className="flex items-center justify-between border-b border-border pb-3">
+                  <Badge variant="primary">
+                    Page {currentPageIndex + 1} of {pages.length}
+                  </Badge>
+                </div>
+                <div className="prose prose-sm md:prose-base max-w-none">
+                  <ReactMarkdown>
+                    {currentPage?.content || "No content available"}
+                  </ReactMarkdown>
+                </div>
+              </>
+            ) : (
+              <div className="prose prose-sm md:prose-base max-w-none">
+                {currentStory.content || "No content available"}
+              </div>
             )}
-          </div>
-        </div>
-      </div>
 
-      {/* Reading Section */}
-      <div className={styles.readingSection}>
-        <div className={styles.pageContent}>
-          {pages.length > 0 ? (
-            <>
-              <div className={styles.pageHeader}>
-                <span className={styles.pageNumber}>
-                  Page {currentPageIndex + 1} of {pages.length}
-                </span>
+            {/* Navigation */}
+            {pages.length > 0 && (
+              <div className="flex items-center justify-between pt-6 border-t border-border">
+                <Button
+                  onClick={handlePrevPage}
+                  disabled={currentPageIndex === 0}
+                  variant="outline"
+                  size="md"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Previous
+                </Button>
+                <Button
+                  onClick={handleNextPage}
+                  disabled={currentPageIndex === pages.length - 1}
+                  variant="primary"
+                  size="md"
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
               </div>
-              <div className={styles.content}>
-                {currentPage?.content || "No content available"}
-              </div>
-            </>
-          ) : (
-            <div className={styles.content}>{currentStory.content}</div>
-          )}
-        </div>
+            )}
+          </CardContent>
+        </Card>
 
-        {/* Navigation */}
-        {pages.length > 0 && (
-          <div className={styles.navigation}>
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPageIndex === 0}
-              className={styles.navButton}
-            >
-              <ChevronLeft size={20} /> Previous
-            </button>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPageIndex === pages.length - 1}
-              className={styles.navButton}
-            >
-              Next <ChevronRight size={20} />
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Comments Section */}
-      <div className={styles.commentsSection}>
-        <button
-          onClick={() => setShowComments(!showComments)}
-          className={styles.commentsToggle}
-        >
-          <MessageCircle size={20} />
-          {showComments
-            ? "Hide Comments"
-            : `Show Comments (${comments.length})`}
-        </button>
-
-        {showComments && (
-          <div className={styles.commentsContainer}>
-            <form onSubmit={handleSubmitComment} className={styles.commentForm}>
-              <textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Write a comment..."
-                className={styles.commentInput}
-                rows={3}
-                required
-              />
-              <button type="submit" className={styles.commentSubmit}>
-                Post Comment
-              </button>
-            </form>
-
-            <div className={styles.commentsList}>
-              {comments.length === 0 ? (
-                <p className={styles.noComments}>
-                  No comments yet. Be the first to comment!
-                </p>
-              ) : (
-                comments.map((comment) => (
-                  <div key={comment.id} className={styles.comment}>
-                    <div className={styles.commentHeader}>
-                      <div className={styles.commentUser}>
-                        <Image
-                          src={
-                            comment.user.profilePicture
-                              ? `http://localhost:8000/uploads/${comment.user.profilePicture}`
-                              : "/default.png"
-                          }
-                          alt={`${comment.user.username} profile picture`}
-                          width={32}
-                          height={32}
-                          className={styles.commentAvatar}
-                        />
-                        <div>
-                          <p className={styles.commentAuthor}>
-                            {comment.user.username}
-                          </p>
-                          <p className={styles.commentDate}>
-                            {new Date(comment.createdAt).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-                      {user?.id === comment.user.id && (
-                        <button
-                          onClick={() => handleDeleteComment(comment.id)}
-                          className={styles.deleteButton}
-                          title="Delete comment"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      )}
-                    </div>
-                    <p className={styles.commentContent}>{comment.content}</p>
-                  </div>
-                ))
-              )}
+        {/* Comments Section */}
+        <Card variant="neomorph" padding="lg">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <MessageCircle className="h-5 w-5" />
+                Comments ({comments.length})
+              </CardTitle>
+              <Button
+                onClick={() => setShowComments(!showComments)}
+                variant="ghost"
+                size="sm"
+              >
+                {showComments ? "Hide" : "Show"}
+              </Button>
             </div>
-          </div>
-        )}
+          </CardHeader>
+
+          {showComments && (
+            <CardContent className="space-y-6">
+              {/* Comment Form */}
+              <form onSubmit={handleSubmitComment} className="space-y-3">
+                <Textarea
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  placeholder="Write a comment..."
+                  rows={3}
+                  required
+                />
+                <Button type="submit" variant="primary" size="md">
+                  Post Comment
+                </Button>
+              </form>
+
+              {/* Comments List */}
+              <div className="space-y-4">
+                {comments.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">
+                    No comments yet. Be the first to comment!
+                  </p>
+                ) : (
+                  comments.map((comment) => (
+                    <div
+                      key={comment.id}
+                      className="p-4 rounded-lg bg-muted/30 border border-border space-y-3"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20">
+                            <Image
+                              src={
+                                comment.user.profilePicture
+                                  ? `http://localhost:8000/uploads/${comment.user.profilePicture}`
+                                  : "/default.png"
+                              }
+                              alt={`${comment.user.username} profile`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div>
+                            <p className="font-medium text-foreground">
+                              {comment.user.username}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(comment.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        {user?.id === comment.user.id && (
+                          <Button
+                            onClick={() => handleDeleteComment(comment.id)}
+                            variant="ghost"
+                            size="sm"
+                            className="text-error hover:bg-error/10"
+                            title="Delete comment"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                      <p className="text-sm text-foreground leading-relaxed">
+                        {comment.content}
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          )}
+        </Card>
       </div>
     </div>
   );

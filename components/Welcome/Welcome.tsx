@@ -3,46 +3,48 @@
 import Image from "next/image";
 import { useAuthStore } from "@/services/stores";
 import { useRouter } from "next/navigation";
-import styles from "./Welcome.module.css";
+import { Button } from "@/components/ui";
 
 export default function Welcome() {
   const { token } = useAuthStore();
   const router = useRouter();
 
   return (
-    <div className={styles.container}>
+    <div className="min-h-screen w-full flex flex-col md:flex-row items-center justify-center bg-background">
       {/* Left Side - Welcome Image */}
-      <div className={styles.left}>
+      <div className="relative w-full md:w-1/2 h-[40vh] md:h-screen">
         <Image
           src="/welcome.png"
           alt="Welcome Illustration"
           fill
-          className={styles.image}
+          className="object-cover"
           priority
         />
       </div>
 
       {/* Right Side */}
-      <div className={styles.right}>
+      <div className="flex flex-col items-center justify-center gap-8 w-full md:w-1/2 p-8 md:p-16">
         <Image
           src="/istoda.png"
           alt="Istoda Logo"
           width={220}
           height={220}
-          className={styles.logo}
+          className="object-contain"
         />
 
-        <p className={styles.tagline}>
+        <p className="text-center text-lg md:text-xl text-foreground/80 max-w-md leading-relaxed">
           A platform where stories come alive. <br />
           Read and write short stories that will live forever.
         </p>
 
-        <button
+        <Button
           onClick={() => router.push(!token ? "/auth/login" : "/home")}
-          className={styles.loginButton}
+          variant="primary"
+          size="lg"
+          className="mt-4"
         >
           Start your journey
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -6,10 +6,12 @@ export interface Story {
   coverPhoto: string;
   content: string;
   description?: string;
-  category: {
+  categories: {
     id: string;
     name: string;
-  };
+    description?: string;
+    color: string;
+  }[];
   publishingDate: string;
   author: {
     id: string;
@@ -25,9 +27,8 @@ export interface Story {
 
 export interface CreateStoryData {
   title: string;
-  content: string;
   description?: string;
-  categoryId: string;
+  categoryIds: string[];
   coverPhoto?: File;
 }
 
@@ -35,7 +36,7 @@ export interface UpdateStoryData {
   title?: string;
   content?: string;
   description?: string;
-  categoryId?: string;
+  categoryIds?: string[];
   coverPhoto?: File;
 }
 
@@ -94,9 +95,8 @@ export const storyApi = {
   createStory: async (data: CreateStoryData): Promise<Story> => {
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("content", data.content);
     if (data.description) formData.append("description", data.description);
-    formData.append("categoryId", data.categoryId);
+    formData.append("categoryIds", data.categoryIds.join(","));
     if (data.coverPhoto) formData.append("coverPhoto", data.coverPhoto);
 
     const response = await axiosInstance.post<Story>("/stories", formData, {
@@ -142,7 +142,7 @@ export const storyApi = {
     if (data.title) formData.append("title", data.title);
     if (data.content) formData.append("content", data.content);
     if (data.description) formData.append("description", data.description);
-    if (data.categoryId) formData.append("categoryId", data.categoryId);
+    if (data.categoryIds) formData.append("categoryIds", data.categoryIds.join(","));
     if (data.coverPhoto) formData.append("coverPhoto", data.coverPhoto);
 
     const response = await axiosInstance.put<Story>(
